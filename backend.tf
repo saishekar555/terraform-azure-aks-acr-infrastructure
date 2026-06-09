@@ -1,7 +1,8 @@
 resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstate12345shekar"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
+  name                = "tfstate12345shekar"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = "Central India"
+
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }

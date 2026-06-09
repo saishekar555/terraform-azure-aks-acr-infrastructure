@@ -11,46 +11,46 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = "terraform-rg-demo"
+module "resource_group" {
+  source = "./modules/rg"
+
+  rg_name  = "terraform-rg-demo"
   location = "Central India"
 }
 
-resource "azurerm_virtual_network" "vnet" {
-  name                = "terraform-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+module "network" {
+  source = "./modules/network"
+
+  vnet_name     = "terraform-vnet"
+  address_space = ["10.0.0.0/16"]
+
+  subnet_name     = "aks-subnet"
+  subnet_prefixes = ["10.0.1.0/24"]
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = "Central India"
 }
 
-resource "azurerm_subnet" "subnet" {
-  name                 = "aks-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
+module "acr" {
+  source = "./modules/acr"
+
+  acr_name            = "terraformacr12345"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = "Central India"
+
+  sku           = "Basic"
+  admin_enabled = true
 }
 
-resource "azurerm_container_registry" "acr" {
-  name                = "terraformacr12345"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = "Basic"
-  admin_enabled       = true
-}
+module "aks" {
+  source = "./modules/aks"
 
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "terraform-aks"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "terraformaks"
+  aks_name            = "terraform-aks"
+  location            = "Central India"
+  resource_group_name = module.resource_group.resource_group_name
 
-  default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size = "Standard_B2s_v2"
-  }
+  dns_prefix = "terraformaks"
 
-  identity {
-    type = "SystemAssigned"
-  }
+  node_count = 1
+  vm_size    = "Standard_B2s_v2"
 }
