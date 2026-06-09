@@ -14,8 +14,8 @@ provider "azurerm" {
 module "resource_group" {
   source = "./modules/rg"
 
-  rg_name  = "terraform-rg-demo"
-  location = "Central India"
+  resource_group_name = "terraform-rg-demo"
+  location            = "Central India"
 }
 
 module "network" {
