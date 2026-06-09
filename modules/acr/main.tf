@@ -5,4 +5,10 @@ resource "azurerm_container_registry" "acr" {
 
   sku           = var.sku
   admin_enabled = var.admin_enabled
+
+  public_network_access_enabled = true
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
