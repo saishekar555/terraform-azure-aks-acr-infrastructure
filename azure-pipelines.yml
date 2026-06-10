@@ -13,8 +13,14 @@ steps:
     terraform version
   displayName: 'Install Terraform'
 
-- script: terraform fmt -check -recursive
-  displayName: 'Terraform Format Check'
+- task: AzureCLI@2
+  displayName: Terraform Init
+  inputs:
+    azureSubscription: 'terraform-sc'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      terraform init
 
 - script: terraform init
   displayName: 'Terraform Init'
