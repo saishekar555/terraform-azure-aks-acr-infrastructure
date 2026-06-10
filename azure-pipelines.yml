@@ -14,16 +14,7 @@ steps:
   displayName: 'Install Terraform'
 
 - task: AzureCLI@2
-  displayName: Terraform Init
-  inputs:
-    azureSubscription: 'terraform-sc'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      terraform init
-
-- task: AzureCLI@2
-  displayName: Terraform Init
+  displayName: 'Terraform Workflow'
   inputs:
     azureSubscription: 'terraform-sc'
     scriptType: 'bash'
@@ -31,9 +22,5 @@ steps:
     inlineScript: |
       az account show
       terraform init
-
-- script: terraform validate
-  displayName: 'Terraform Validate'
-
-- script: terraform plan
-  displayName: 'Terraform Plan'
+      terraform validate
+      terraform plan
