@@ -49,8 +49,16 @@ module "aks" {
   location            = "Central India"
   resource_group_name = module.resource_group.resource_group_name
 
+  subnet_id = module.network.subnet_id
+
   dns_prefix = "terraformaks"
 
   node_count = 1
   vm_size    = "Standard_B2s_v2"
+}
+
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  scope                = module.acr.acr_id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aks.principal_id
 }

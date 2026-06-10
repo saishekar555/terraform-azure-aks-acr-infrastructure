@@ -36,6 +36,7 @@ module "aks" {
   aks_name            = "dev-aks"
   location            = "Central India"
   resource_group_name = module.resource_group.resource_group_name
+  subnet_id           = module.network.subnet_id
 
   dns_prefix = "devaks"
 

@@ -21,3 +21,8 @@ variable "node_count" {
 variable "vm_size" {
   type = string
 }
+
+variable "subnet_id" {
+  description = "AKS subnet ID"
+  type        = string
+}
